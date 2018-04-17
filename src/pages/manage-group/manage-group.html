@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
      <ion-title>
-        RFID Tag Manager
+        {{ pageTitle }}
      </ion-title>
   </ion-navbar>
 </ion-header>
@@ -10,25 +10,25 @@
 
   <ion-item>
      <button
-        class="addGroup"
+        class="addTag"
         ion-button
         item-right
         icon-right
         margin-bottom
         color="primary"
-        (click)="openAddGroup()">
-           Adicionar grupo de tags
+        (click)="openAddTag({record: this.group})">
+           Adicionar tag
            <ion-icon name="add"></ion-icon>
      </button>
   </ion-item>
 
   <ion-item *ngFor="let item of items">
-    <h2>{{ item.groupname }} </h2>
+    <h2>{{ item.tagcode }} </h2>
     <button
        ion-button
        color="primary"
        item-right
-       (click)="openManageGroup({ record: item })">Gerenciar</button>
+       (click)="removeTag({ record: item })">Remover</button>
   </ion-item>
 
 </ion-content>

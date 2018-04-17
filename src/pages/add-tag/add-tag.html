@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-navbar>
+     <ion-title>Cadastrar tags</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <div>
+    <form [formGroup]="form" (ngSubmit)="saveEntry()">
+
+        <ion-list>
+          <ion-item-group>
+              <ion-item-divider color="light">Código da tag *</ion-item-divider>
+              <ion-item>
+                <ion-input
+                    type="text"
+                    placeholder="Digite o código..."
+                    formControlName="code"
+                    [(ngModel)]="tagCode"></ion-input>
+              </ion-item>
+          </ion-item-group>
+
+          <ion-item>
+              <button
+                ion-button
+                color="primary"
+                text-center
+                block
+                [disabled]="!form.valid">Cadastrar</button>
+          </ion-item>
+
+        </ion-list>
+
+    </form>
+  </div>
+
+</ion-content>

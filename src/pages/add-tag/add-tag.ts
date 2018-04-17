@@ -6,20 +6,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @IonicPage()
 @Component({
-  selector: 'page-add-group',
-  templateUrl: 'add-group.html'
+  selector: 'page-add-tag',
+  templateUrl: 'add-tag.html'
 })
-export class AddGroupPage {
+export class AddTagPage {
 
    public form : FormGroup;
 
-   public groupName : any;
-
-   public hideForm : boolean = false;
-
-   public recordID : any = null;
-
-   private baseURI : string  = "http://localhost/rfid-tag-manager/backend/";
+   public group : any;
 
 
    // Initialise module classes
@@ -32,33 +26,31 @@ export class AddGroupPage {
 
       // Create form builder validation rules
       this.form = fb.group({
-         "name" : ["", Validators.required]
+         "code" : ["", Validators.required]
       });
    }
 
    ionViewWillEnter() : void
    {
-      
+      this.setGroup(this.NP.get("record"));
    }
 
-   selectEntry(item : any) : void
+   setGroup(item : any) : void
    {
-      this.groupName = item.name;
-      this.recordID = item.id;
+     this.group = item;
    }
 
-   createEntry(name : string) : void
+   createEntry(code : Array<any>) : void
    {
       let headers : any	= new HttpHeaders({ 'Content-Type': 'application/json' }),
-          options : any	= { "key" : "create", "name" : name },
-          url     : any = this.baseURI + "manage-group.php";
+          options : any	= { "groupid" : this.group.groupid, "tagcode" : code },
+          url     : any = "http://localhost/rfid-tag-manager/backend/add-tag.php";
 
       this.http.post(url, JSON.stringify(options), headers)
       .subscribe((data : any) =>
       {
-         // If the request was successful notify the user
-         this.hideForm   = true;
-         this.sendNotification(`O grupo: ${name} foi criado`);
+         this.sendNotification("A(s) tag(s) foram adicionadas com sucesso!");
+         this.navCtrl.push('ManageGroupPage', {"record": this.group});
       },
       (error : any) =>
       {
@@ -68,9 +60,11 @@ export class AddGroupPage {
 
    saveEntry() : void
    {
-      let name : string = this.form.controls["name"].value;
-
-      this.createEntry(name);
+      let code : string = this.form.controls["code"].value;
+      code = code.replace(" ", "");
+      code = code.toUpperCase();
+      let codeArray = code.split(";");
+      this.createEntry(codeArray);
    }
    
    sendNotification(message : string)  : void
